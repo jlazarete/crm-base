@@ -7,8 +7,7 @@
     {
       "binding": "DB",
       "database_name": "crm-base-db",
-      // Troque pelo ID real depois de criar o banco (docs/fase-0-passo-a-passo.md).
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "dbef8a72-2992-456e-b348-3da36bcc9d44",
       "migrations_dir": "migrations"
     }
   ]
