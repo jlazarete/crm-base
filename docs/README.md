@@ -6,6 +6,7 @@
 
 - **[Plano do crm-base](plano-crm-base.md)** — escopo, modelo de dados, telas, entrada de dados, segurança, stack e fases.
 
+- **[Fase 1: contatos e tela Hoje](fase-1.md)** — decisões, o que foi entregue, como foi validado e como colocar em produção.
 - **[Fase 0, passo a passo](fase-0-passo-a-passo.md)** — o que já foi provado e o que falta fazer nos painéis do GitHub e do Cloudflare.
 
 ## Referências

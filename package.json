@@ -11,7 +11,11 @@
     "test": "bun test tests",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "db:migrar:local": "wrangler d1 migrations apply crm-base-db --local -c wrangler.jsonc",
+    "db:listar:local": "wrangler d1 migrations list crm-base-db --local -c wrangler.jsonc",
+    "db:migrar:producao": "wrangler d1 migrations apply crm-base-db --remote -c wrangler.jsonc",
+    "simulador": "wrangler dev -c .output/server/wrangler.json --persist-to .wrangler/state"
   },
   "overrides": {
     "rolldown": "1.2.1"
@@ -43,6 +47,7 @@
     "prettier": "^3.7.3",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
-    "vite": "8.1.6"
+    "vite": "8.1.6",
+    "wrangler": "4.162.0"
   }
 }

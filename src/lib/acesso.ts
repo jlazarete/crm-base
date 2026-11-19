@@ -8,6 +8,8 @@
 //   CF_ACCESS_TEAM       nome do time no Zero Trust (o trecho antes de .cloudflareaccess.com)
 //   CF_ACCESS_AUD        "Application Audience (AUD) Tag" do aplicativo no Access
 //   CRM_EMAIL_PERMITIDO  o único e-mail que pode entrar
+//   CF_ACCESS_CERTS_URL  SÓ para testes locais (aponta para um servidor de chaves de teste).
+//                        Nunca configurar em produção: sem ela, as chaves vêm do Cloudflare.
 
 export type Env = Record<string, string | undefined>;
 export type Chave = JsonWebKey & { kid?: string };
@@ -48,10 +50,9 @@ async function buscarChaves(time: string, deps: AcessoDeps, forcar: boolean): Pr
   if (!forcar && cache && cache.time === time && agora - cache.em < VALIDADE_CACHE_MS) {
     return cache.jwks;
   }
-  const resposta = await (deps.fetchImpl ?? fetch)(
-    `https://${time}.cloudflareaccess.com/cdn-cgi/access/certs`,
-    { signal: AbortSignal.timeout(4000) },
-  );
+  const url =
+    deps.env["CF_ACCESS_CERTS_URL"] ?? `https://${time}.cloudflareaccess.com/cdn-cgi/access/certs`;
+  const resposta = await (deps.fetchImpl ?? fetch)(url, { signal: AbortSignal.timeout(4000) });
   if (!resposta.ok) throw new Error(`certs ${resposta.status}`);
   const jwks = (await resposta.json()) as Jwks;
   cache = { time, jwks, em: agora };

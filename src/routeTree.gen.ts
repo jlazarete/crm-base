@@ -11,6 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiSaudeRouteImport } from './routes/api.saude'
+import { Route as ContatosIndexRouteImport } from './routes/contatos.index'
+import { Route as ContatosNovoRouteImport } from './routes/contatos.novo'
+import { Route as ContatosIdIndexRouteImport } from './routes/contatos.$id.index'
+import { Route as ContatosIdEditarRouteImport } from './routes/contatos.$id.editar'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +26,86 @@ const ApiSaudeRoute = ApiSaudeRouteImport.update({
   path: '/api/saude',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContatosIndexRoute = ContatosIndexRouteImport.update({
+  id: '/contatos/',
+  path: '/contatos/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContatosNovoRoute = ContatosNovoRouteImport.update({
+  id: '/contatos/novo',
+  path: '/contatos/novo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContatosIdIndexRoute = ContatosIdIndexRouteImport.update({
+  id: '/contatos/$id/',
+  path: '/contatos/$id/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContatosIdEditarRoute = ContatosIdEditarRouteImport.update({
+  id: '/contatos/$id/editar',
+  path: '/contatos/$id/editar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/saude': typeof ApiSaudeRoute
+  '/contatos/novo': typeof ContatosNovoRoute
+  '/contatos/': typeof ContatosIndexRoute
+  '/contatos/$id/editar': typeof ContatosIdEditarRoute
+  '/contatos/$id/': typeof ContatosIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/saude': typeof ApiSaudeRoute
+  '/contatos/novo': typeof ContatosNovoRoute
+  '/contatos': typeof ContatosIndexRoute
+  '/contatos/$id/editar': typeof ContatosIdEditarRoute
+  '/contatos/$id': typeof ContatosIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/api/saude': typeof ApiSaudeRoute
+  '/contatos/novo': typeof ContatosNovoRoute
+  '/contatos/': typeof ContatosIndexRoute
+  '/contatos/$id/editar': typeof ContatosIdEditarRoute
+  '/contatos/$id/': typeof ContatosIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/saude'
+  fullPaths:
+    | '/'
+    | '/api/saude'
+    | '/contatos/novo'
+    | '/contatos/'
+    | '/contatos/$id/editar'
+    | '/contatos/$id/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/saude'
-  id: '__root__' | '/' | '/api/saude'
+  to:
+    | '/'
+    | '/api/saude'
+    | '/contatos/novo'
+    | '/contatos'
+    | '/contatos/$id/editar'
+    | '/contatos/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/api/saude'
+    | '/contatos/novo'
+    | '/contatos/'
+    | '/contatos/$id/editar'
+    | '/contatos/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiSaudeRoute: typeof ApiSaudeRoute
+  ContatosNovoRoute: typeof ContatosNovoRoute
+  ContatosIndexRoute: typeof ContatosIndexRoute
+  ContatosIdEditarRoute: typeof ContatosIdEditarRoute
+  ContatosIdIndexRoute: typeof ContatosIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +124,44 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSaudeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contatos/': {
+      id: '/contatos/'
+      path: '/contatos'
+      fullPath: '/contatos/'
+      preLoaderRoute: typeof ContatosIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contatos/novo': {
+      id: '/contatos/novo'
+      path: '/contatos/novo'
+      fullPath: '/contatos/novo'
+      preLoaderRoute: typeof ContatosNovoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contatos/$id/': {
+      id: '/contatos/$id/'
+      path: '/contatos/$id'
+      fullPath: '/contatos/$id/'
+      preLoaderRoute: typeof ContatosIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contatos/$id/editar': {
+      id: '/contatos/$id/editar'
+      path: '/contatos/$id/editar'
+      fullPath: '/contatos/$id/editar'
+      preLoaderRoute: typeof ContatosIdEditarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiSaudeRoute: ApiSaudeRoute,
+  ContatosNovoRoute: ContatosNovoRoute,
+  ContatosIndexRoute: ContatosIndexRoute,
+  ContatosIdEditarRoute: ContatosIdEditarRoute,
+  ContatosIdIndexRoute: ContatosIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

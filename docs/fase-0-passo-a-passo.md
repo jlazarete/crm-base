@@ -22,7 +22,7 @@ O código da fase 0 está pronto e testado localmente. Estes passos fazem a part
 ## Passos
 
 1. **Repositório.** Crie o repositório privado `crm-base` no GitHub (ou peça ao Claude, que cria e envia o código só com a sua autorização).
-2. **Banco D1.** No Cloudflare, Storage e Databases, D1, crie o banco `crm-base-db`. Copie o ID e informe ao Claude (o ID não é segredo), que o coloca em `vite.config.ts`.
+2. **Banco D1.** No Cloudflare, Storage e Databases, D1, crie o banco `crm-base-db`. Copie o ID e informe ao Claude (o ID não é segredo), que o coloca em `wrangler.jsonc` (fonte única do banco).
 3. **Worker com deploy automático.** Em Workers e Pages, Create, conecte o repositório `crm-base` ao Workers Builds com o nome `crm-base`. Use os mesmos comandos de build e de deploy do Worker `lazarete-automacoes`.
 4. **Endereço.** No Worker, Settings, Domains, adicione `crm.lazarete.com.br`. Desligue o endereço `workers.dev` do Worker.
 5. **Cloudflare Access.** No Zero Trust, Access, Applications, Add, Self-hosted:

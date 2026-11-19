@@ -1,7 +1,8 @@
-import { createStart, createMiddleware } from "@tanstack/react-start";
+import { createCsrfMiddleware, createStart, createMiddleware } from "@tanstack/react-start";
 import { setResponseHeader } from "@tanstack/react-start/server";
 
 import { verificarAcesso } from "./lib/acesso";
+import { opcoesCsrf } from "./lib/csrf";
 
 // CSP com nonce por requisição e cabeçalhos de segurança (mesmo padrão do site).
 const cspMiddleware = createMiddleware().server(async ({ next }) => {
@@ -43,5 +44,5 @@ const acessoMiddleware = createMiddleware().server(async ({ request, next }) => 
 });
 
 export const startInstance = createStart(() => ({
-  requestMiddleware: [cspMiddleware, acessoMiddleware],
+  requestMiddleware: [cspMiddleware, createCsrfMiddleware(opcoesCsrf), acessoMiddleware],
 }));

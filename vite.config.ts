@@ -5,10 +5,6 @@ import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 
-// ID do banco D1 do CRM. Troque pelo id real depois de criar o banco
-// (docs/fase-0-passo-a-passo.md). Sem isso o deploy não encontra o banco.
-const D1_DATABASE_ID = "00000000-0000-0000-0000-000000000000";
-
 export default defineConfig(({ command }) => ({
   css: { transformer: "lightningcss" },
   resolve: { alias: { "@": `${process.cwd()}/src` } },
@@ -38,9 +34,6 @@ export default defineConfig(({ command }) => ({
                   },
                   traces: { enabled: false },
                 },
-                d1_databases: [
-                  { binding: "DB", database_name: "crm-base-db", database_id: D1_DATABASE_ID },
-                ],
               },
             },
           }),

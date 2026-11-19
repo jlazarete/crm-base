@@ -1,0 +1,15 @@
+// Fonte única da configuração do Worker. O build (nitro) mescla este arquivo no
+// .output/server/wrangler.json. O banco D1 fica declarado SÓ aqui: declarar também no
+// vite.config.ts duplicaria o binding, porque o nitro soma as listas.
+{
+  "name": "crm-base",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "crm-base-db",
+      // Troque pelo ID real depois de criar o banco (docs/fase-0-passo-a-passo.md).
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ]
+}

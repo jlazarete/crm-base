@@ -1,25 +1,42 @@
-// Acesso ao binding D1 ("DB", ver vite.config.ts) do Worker em produção.
-// O runtime do Cloudflare (via Nitro, build e `wrangler dev`) grava o `env`
-// do Worker em `globalThis.__env__` a cada requisição -- não há outra forma
-// de alcançar bindings de objeto (D1, KV, R2...) fora do contexto de request,
-// diferente de secrets/vars de texto, que aparecem em `process.env`.
+// Acesso ao binding D1 ("DB", declarado em wrangler.jsonc). Em produção e no simulador do
+// Cloudflare, o runtime (via Nitro) grava o `env` do Worker em `globalThis.__env__` a cada
+// requisição. No `vite dev` esse env não existe; só ali usamos o proxy do wrangler, que lê o
+// mesmo banco local criado por `bun run db:migrar:local`.
+export interface ResultadoD1 {
+  success: boolean;
+  meta: { changes: number };
+}
+
 export interface D1PreparedStatement {
   bind: (...values: unknown[]) => D1PreparedStatement;
-  run: () => Promise<{ success: boolean }>;
+  run: () => Promise<ResultadoD1>;
   first: <T = unknown>() => Promise<T | null>;
+  all: <T = unknown>() => Promise<{ results: T[]; success: boolean }>;
 }
 
 export interface D1Database {
   prepare: (sql: string) => D1PreparedStatement;
+  batch: (statements: D1PreparedStatement[]) => Promise<ResultadoD1[]>;
 }
 
-export function getDb(): D1Database {
+let bancoDeDesenvolvimento: Promise<D1Database> | undefined;
+
+async function abrirBancoDeDesenvolvimento(): Promise<D1Database> {
+  const { getPlatformProxy } = await import("wrangler");
+  const proxy = await getPlatformProxy<{ DB: D1Database }>({
+    configPath: "wrangler.jsonc",
+    persist: true,
+  });
+  return proxy.env.DB;
+}
+
+export async function obterBanco(): Promise<D1Database> {
   const env = (globalThis as { __env__?: Record<string, unknown> }).__env__;
   const db = env?.["DB"];
-  if (!db) {
-    throw new Error(
-      'Binding D1 "DB" indisponível. Em dev local (`bun run dev`) ele não existe -- teste com `bun run build && bun run preview` ou um deploy de preview.',
-    );
+  if (db) return db as D1Database;
+  if (import.meta.env.DEV) {
+    bancoDeDesenvolvimento ??= abrirBancoDeDesenvolvimento();
+    return bancoDeDesenvolvimento;
   }
-  return db as D1Database;
+  throw new Error('Binding D1 "DB" indisponível.');
 }
