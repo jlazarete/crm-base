@@ -1,0 +1,9 @@
+#!/bin/sh
+# Bloqueia commit de arquivo de ambiente/segredo, mesmo com "git add -A" ou "git add -f".
+# Ativado via "core.hooksPath" (script "prepare" do package.json).
+blocked=$(git diff --cached --name-only --diff-filter=ACM | grep -E '(^|/)\.env(\.[^/]*)?$' | grep -v '\.env\.example$')
+if [ -n "$blocked" ]; then
+  echo "COMMIT BLOQUEADO: arquivo de ambiente/segredo no stage:"
+  echo "$blocked"
+  exit 1
+fi
